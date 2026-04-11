@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import { env } from "./env";
 
 const generateToken = (userId: string) => {
-  const secret = process.env.JWT_SECRET;
+  const secret = env.JWT_SECRET;
   if (!secret) {
     throw new Error("Secret Key not found");
   }
