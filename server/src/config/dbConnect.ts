@@ -1,4 +1,5 @@
 import mongoose, { connection } from "mongoose";
+import { env } from "./env";
 
 const dbConnect = async () => {
   if (connection.readyState >= 1) {
@@ -6,7 +7,7 @@ const dbConnect = async () => {
     return;
   }
 
-  const uri = process.env.MONGO_URI;
+  const uri = env.MONGO_URI;
  
 
   if (!uri) {
