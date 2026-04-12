@@ -3,7 +3,11 @@ import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError";
 import { env } from "../config/env";
 
-const protect = async (req: Request, res: Response, next: NextFunction) => {
+const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const token = req.cookies.token;
   if (!token) {
     throw new AppError("No token received", 401);
@@ -17,4 +21,4 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default protect
+export default authMiddleware;

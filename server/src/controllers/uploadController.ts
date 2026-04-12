@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import {confirmSchema, urlSchema} from "../types/url.types";
+import { confirmSchema, urlSchema } from "../types/url.types";
 import AppError from "../utils/AppError";
 import Job from "../models/Job";
 import { generatePresignedUrl } from "../config/uploadService";
 
-export const uploadFileUrl = async (req: Request, res: Response) => {
+export const fileUploadUrl = async (req: Request, res: Response) => {
   const result = urlSchema.safeParse(req.body);
   if (!result.success) {
     throw new AppError(result.error.issues[0].message, 400);
   }
-  const { fileName, fileType, fileHash, difficulty } = result.data;
+  const { fileName, fileType, fileHash } = result.data;
 
   const existingJob = await Job.findOne({ fileHash, status: "completed" });
   if (existingJob) {
@@ -37,13 +37,22 @@ export const uploadFileUrl = async (req: Request, res: Response) => {
   });
 };
 
-export const uploadConfirm = async (req: Request, res: Response) =>{
-  const result = confirmSchema.safeParse(req.body)
+export const uploadConfirm = async (req: Request, res: Response) => {
+  const result = confirmSchema.safeParse(req.body);
   if (!result.success) {
     throw new AppError(result.error.issues[0].message, 400);
   }
-  const {fileKey,fileHash,difficulty}=result.data
-  
- 
-  
-}
+  const { fileKey, fileHash, difficulty } = result.data;
+
+  const userId = req?.user?.id;
+  const newJob = await Job.create({
+    userId,
+    fileKey,
+    fileHash,
+    difficulty,
+    status: "pending",
+
+  });
+
+  res.status(201).json({ message: "Job created", data: { jobId: newJob._id } });
+};

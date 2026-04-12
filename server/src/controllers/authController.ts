@@ -42,12 +42,12 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  console.log(req.body)
+  console.log(req.body);
   const result = loginSchema.safeParse(req.body);
   if (!result.success) {
     throw new AppError(result.error.issues[0].message, 400);
   }
-  
+
   const { identifier, password } = result.data;
   const foundUser = await User.findOne({
     $or: [{ email: identifier }, { username: identifier }],
@@ -65,7 +65,11 @@ export const loginUser = async (req: Request, res: Response) => {
 
   res
     .status(200)
-    .cookie("token", token, { httpOnly: true, sameSite: "none", secure: true })
+    .cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+    })
     .json({
       message: "Logged in",
       user: {
