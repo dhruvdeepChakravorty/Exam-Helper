@@ -6,7 +6,7 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    filekey: {
+    fileKey: {
       type: String,
       required: true,
     },

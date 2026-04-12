@@ -4,11 +4,11 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes";
 import helmet from "helmet";
 import morgan from "morgan";
-import {globalLimiter} from "./middlewares/globalLimiter";
-
-
+import { globalLimiter } from "./middlewares/globalLimiter";
+import uploadRouter from "./routes/uploadRoutes";
 
 const app = express();
+
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -19,6 +19,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/uploads", uploadRouter);
 
 app.use(errorHandler);
 export default app;

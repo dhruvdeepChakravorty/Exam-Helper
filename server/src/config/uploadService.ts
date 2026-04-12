@@ -5,19 +5,19 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import s3 from "./s3";
 
 export const generatePresignedUrl = async (
-  filetype: string,
-  filename: string,
+  fileType: string,
+  fileName: string,
 ) => {
-  const fileExtension = filename.split(".").pop();
-  const filekey = `uploads/${uuidv4()}.${fileExtension}`;
+  const fileExtension = fileName.split(".").pop();
+  const fileKey = `uploads/${uuidv4()}.${fileExtension}`;
 
   const command = new PutObjectCommand({
     Bucket: env.AWS_S3_BUCKET_NAME,
-    Key: filekey,
-    ContentType: filetype,
+    Key: fileKey,
+    ContentType: fileType,
   });
 
   const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
 
-  return { presignedUrl, filekey };
+  return { presignedUrl, fileKey };
 };
