@@ -8,15 +8,15 @@ const envSchema = z.object({
   AWS_SECRET_KEY: z.string(),
   AWS_REGION: z.string(),
   AWS_S3_BUCKET_NAME: z.string(),
+  REDIS_URL: z.string(),
 });
 
-const parsed = envSchema.safeParse(process.env)
-
+const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-   console.error("Missing ENV variables")
-   console.error(parsed.error.issues)
-   process.exit(1)
+  console.error("Missing ENV variables");
+  console.error(parsed.error.issues);
+  process.exit(1);
 }
 
-export const env = parsed.data
+export const env = parsed.data;
