@@ -21,3 +21,14 @@ export const generatePresignedUrl = async (
 
   return { presignedUrl, fileKey };
 };
+
+export const generatePresignedUrls = async (
+  fileTypes: string[],
+  fileNames: string[],
+) => {
+  return Promise.all(
+    fileTypes.map((fileType, i) =>
+      generatePresignedUrl(fileType, fileNames[i]),
+    ),
+  );
+};

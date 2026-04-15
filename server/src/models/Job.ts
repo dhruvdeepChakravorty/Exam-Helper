@@ -6,12 +6,12 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    fileKey: {
-      type: String,
+    fileKeys: {
+      type: [String],
       required: true,
     },
-    fileHash: {
-      type: String,
+    fileHashes: {
+      type: [String],
       required: true,
     },
     difficulty: {
