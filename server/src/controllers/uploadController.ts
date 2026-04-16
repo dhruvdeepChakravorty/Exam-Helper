@@ -13,7 +13,7 @@ export const fileUploadUrl = async (req: Request, res: Response) => {
   const { fileName, fileType, fileHashes } = result.data;
 
   const existingJob = await Job.findOne({
-    fileHashes: { $in: fileHashes },
+     fileHashes: { $all: fileHashes, $size: fileHashes.length },
     status: "completed",
   });
   if (existingJob) {
@@ -42,7 +42,7 @@ export const uploadConfirm = async (req: Request, res: Response) => {
   if (!result.success) {
     throw new AppError(result.error.issues[0].message, 400);
   }
-  const { fileKeys, fileHashes, difficulty } = result.data;
+  const { fileKeys, fileHashes, difficulty, subject, educationLevel, year } = result.data;
 
   const userId = req?.user?.id;
   const newJob = await Job.create({
@@ -50,6 +50,9 @@ export const uploadConfirm = async (req: Request, res: Response) => {
     fileKeys,
     fileHashes,
     difficulty,
+    subject,
+    educationLevel,
+    year,
     status: "pending",
   });
 

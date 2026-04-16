@@ -9,5 +9,5 @@ export const globalLimiter = rateLimit({
 export const uploadLimiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000,
   limit: 5,
-  message: { message: "Upload limit reached, try again after an hour" },
+  message: { message: "Upload limit reached, try again tommorow" },
 });
