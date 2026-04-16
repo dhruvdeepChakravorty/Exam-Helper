@@ -10,10 +10,10 @@ export const fileUploadUrl = async (req: Request, res: Response) => {
   if (!result.success) {
     throw new AppError(result.error.issues[0].message, 400);
   }
-  const { fileName, fileType, fileHash } = result.data;
+  const { fileName, fileType, fileHashes } = result.data;
 
   const existingJob = await Job.findOne({
-    fileHash: { $in: fileHash },
+    fileHashes: { $in: fileHashes },
     status: "completed",
   });
   if (existingJob) {
