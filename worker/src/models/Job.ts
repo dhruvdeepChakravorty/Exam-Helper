@@ -6,11 +6,11 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    fileKey: {
+    fileKeys: {
       type: [String],
       required: true,
     },
-    fileHash:  {
+    fileHashes: {
       type: [String],
       required: true,
     },
@@ -19,6 +19,16 @@ const jobSchema = new mongoose.Schema(
       enum: ["easy", "medium", "hard"],
       required: true,
     },
+    subject: {
+      type: String,
+      required: true,
+    },
+    educationLevel: {
+      type: String,
+      enum: ["school", "college"],
+      required: true,
+    },
+    year: { type: String, required: true },
     status: {
       type: String,
       enum: ["pending", "processing", "completed", "failed"],

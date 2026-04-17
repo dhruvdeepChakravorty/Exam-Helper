@@ -4,24 +4,31 @@ import { extractTextFromS3 } from "./textract";
 import { generateQuestions } from "./gemini";
 
 export const processPdf = async (job: Job) => {
-  const { jobId, fileKeys, difficulty } = job.data;
-  await JobModel.findByIdAndUpdate(jobId, { status: "processing" });
+  const { jobId, fileKeys, difficulty, subject, educationLevel, year } = job.data
+  console.log("Processing job:", jobId)
+  
+  await JobModel.findByIdAndUpdate(jobId, { status: "processing" })
+  
   try {
+    console.log("Fetching from S3 and running Textract...")
     const texts = await Promise.all(
-      fileKeys.map((filekey: string) => extractTextFromS3(filekey)),
-    );
+      fileKeys.map((fileKey: string) => extractTextFromS3(fileKey))
+    )
+    console.log("Textract done, combined text length:", texts.join("\n\n").length)
+    
+    console.log("Sending to Gemini...")
     const combinedText = texts.join("/n/n");
-    const result = await generateQuestions(combinedText, difficulty);
 
-    await JobModel.findByIdAndUpdate(jobId, {
-      status: "copleted",
-      results: result,
-    });
+    const results = await generateQuestions(combinedText, difficulty, subject, educationLevel, year)
+    console.log("Gemini done")
+    
+    await JobModel.findByIdAndUpdate(jobId, { status: "completed", results })
   } catch (error) {
+    console.error("Processing error:", error)
     await JobModel.findByIdAndUpdate(jobId, {
       status: "failed",
       errorMessage: error instanceof Error ? error.message : "Unknown error",
-    });
-    throw error;
+    })
+    throw error
   }
-};
+}

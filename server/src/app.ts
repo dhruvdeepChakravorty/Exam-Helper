@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { globalLimiter } from "./middlewares/globalLimiter";
 import uploadRouter from "./routes/uploadRoutes";
+import jobRouter from './routes/jobRoutes'
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/uploads", uploadRouter);
+app.use("/api/jobs", jobRouter)
 
 app.use(errorHandler);
 export default app;

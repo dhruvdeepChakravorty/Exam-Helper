@@ -6,7 +6,7 @@ import { uploadLimiter } from "../middlewares/globalLimiter"
 const router = express.Router()
 
 
-router.post('/presigned-url', authMiddleware,uploadLimiter,fileUploadUrl)
-router.post('/confirm',authMiddleware,uploadLimiter,uploadConfirm)
+router.post('/presigned-url', authMiddleware,fileUploadUrl)
+router.post('/confirm',authMiddleware,uploadConfirm)
 
 export default router
