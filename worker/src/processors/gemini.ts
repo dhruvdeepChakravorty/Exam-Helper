@@ -24,7 +24,7 @@ Analyze the following previous year exam papers and:
 2. Generate exactly 10 questions appropriate for the difficulty level, prioritizing topics that appear most frequently. Do not generate more than 3 questions from the same topic.
 3. Rank topics by importance based on repetition: high = appears 3 or more times, medium = appears 2 times, low = appears once
 4. High importance topics are those a student must study to pass the exam
-
+5.Return between 5-15 most significant topics only
 Rules:
 - Questions must match the difficulty level (easy = conceptual, medium = application, hard = analytical)
 - Prioritize questions from high importance topics
@@ -49,12 +49,14 @@ Return exactly this JSON structure:
   ]
 }
 
+If the provided text is insufficient or unreadable, return an error field in JSON: { "error": "insufficient content" }"
+
 Previous Examination Papers Text:
 ${combinedText}
 `;
 
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-3.1-flash-lite-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
