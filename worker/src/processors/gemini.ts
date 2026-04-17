@@ -32,7 +32,7 @@ Rules:
 - Topics and Questions must only come from the provided exam papers, not from general knowledge
 - Return ONLY valid JSON, no markdown, no explanation
 
-Return exactly this JSON structure:
+Return exactly this JSON structure ONLY:
 {
   "subject": "detected or provided subject name",
   "questions": [
@@ -49,8 +49,8 @@ Return exactly this JSON structure:
   ]
 }
 
-If the provided text is insufficient or unreadable, return an error field in JSON: { "error": "insufficient content" }"
-
+If the provided text is insufficient or unreadable, return an error field in JSON ONLY: { "error": "insufficient content" }
+Return only the structured JSON output. No greetings, no explanations, no markdown.
 Previous Examination Papers Text:
 ${combinedText}
 `;
@@ -60,12 +60,15 @@ ${combinedText}
     contents: prompt,
     config: {
       responseMimeType: "application/json",
-      responseJsonSchema: aiOutputSchema,
+     
     },
   });
+  
   if (!response.text) {
     throw new Error("No response text received from AI");
   }
-  return aiOutputSchema.parse(JSON.parse(response.text));
+  const data = JSON.parse(response.text);
+  console.log("Gemini raw response:", data)
+  return data;
 };
 export default generateQuestions;

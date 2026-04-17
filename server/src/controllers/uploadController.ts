@@ -57,14 +57,24 @@ export const uploadConfirm = async (req: Request, res: Response) => {
     status: "pending",
   });
 
-  await pdfQueue.add("process-pdf", {
-    jobId: newJob._id,
-    fileKeys: newJob.fileKeys,
-    difficulty: newJob.difficulty,
-    subject: newJob.subject,
-    educationLevel: newJob.educationLevel,
-    year: newJob.year,
-  });
+  await pdfQueue.add(
+    "process-pdf",
+    {
+      jobId: newJob._id,
+      fileKeys: newJob.fileKeys,
+      difficulty: newJob.difficulty,
+      subject: newJob.subject,
+      educationLevel: newJob.educationLevel,
+      year: newJob.year,
+    },
+    {
+      attempts: 3,
+      backoff: {
+        type: "exponential",
+        delay: 5000,
+      },
+    },
+  );
 
   res.status(201).json({ message: "Job created", data: { jobId: newJob._id } });
 };
