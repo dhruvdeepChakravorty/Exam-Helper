@@ -15,7 +15,7 @@ export const aiOutputSchema = z.object({
     .length(10)
     .describe(
       "Exactly 10 important questions a student must study to pass the exam",
-    ),
+    ).default([]),
   topics: z
     .array(
       z.object({
@@ -29,7 +29,7 @@ export const aiOutputSchema = z.object({
     )
     .describe(
       "All topics found across all uploaded papers ranked by how frequently they appear",
-    ),
+    ).default([]),
 });
 
 export type aiResponse = z.infer<typeof aiOutputSchema>;

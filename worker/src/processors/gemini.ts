@@ -49,26 +49,26 @@ Return exactly this JSON structure ONLY:
   ]
 }
 
-If the provided text is insufficient or unreadable, return an error field in JSON ONLY: { "error": "insufficient content" }
+If the provided text is insufficient or unreadable, return: { "subject": ${subject}, "questions": [], "topics": [] }
+
 Return only the structured JSON output. No greetings, no explanations, no markdown.
 Previous Examination Papers Text:
 ${combinedText}
 `;
 
   const response = await ai.models.generateContent({
-    model: "gemini-3.1-flash-lite-preview",
+    model: "gemini-2.5-flash",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
-     
+      responseJsonSchema: aiOutputSchema,
     },
   });
-  
+
   if (!response.text) {
     throw new Error("No response text received from AI");
   }
-  const data = JSON.parse(response.text);
-  console.log("Gemini raw response:", data)
-  return data;
+  console.log("Gemini raw response:", JSON.parse(response.text));
+  return aiOutputSchema.parse(JSON.parse(response.text));
 };
 export default generateQuestions;
