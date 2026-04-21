@@ -4,7 +4,7 @@ import { aiOutputSchema } from "../types/aiOutput.types";
 const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
 export const generateQuestions = async (
-  combinedText: string,
+  extractedText: string,
   difficulty: string,
   subject: string,
   educationLevel: string,
@@ -53,7 +53,7 @@ If the provided text is insufficient or unreadable, return: { "subject": ${subje
 
 Return only the structured JSON output. No greetings, no explanations, no markdown.
 Previous Examination Papers Text:
-${combinedText}
+${extractedText}
 `;
 
   const response = await ai.models.generateContent({

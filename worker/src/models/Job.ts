@@ -42,6 +42,7 @@ const jobSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    extractedText: { type: String, default: null },
   },
   { timestamps: true },
 );
