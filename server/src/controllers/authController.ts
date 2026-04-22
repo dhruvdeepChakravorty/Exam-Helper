@@ -30,7 +30,26 @@ export const registerUser = async (req: Request, res: Response) => {
 
   res
     .status(201)
-    .cookie("token", token, { httpOnly: true, sameSite: "none", secure: true })
+    .cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    .cookie(
+      "user_meta",
+      JSON.stringify({
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      }),
+      {
+        httpOnly: true,
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      },
+    )
     .json({
       message: "User Created",
       user: {
@@ -69,7 +88,22 @@ export const loginUser = async (req: Request, res: Response) => {
       httpOnly: true,
       sameSite: "none",
       secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     })
+    .cookie(
+      "user_meta",
+      JSON.stringify({
+        id: foundUser._id,
+        username: foundUser.username,
+        email: foundUser.email,
+      }),
+      {
+        httpOnly: true,
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      },
+    )
     .json({
       message: "Logged in",
       user: {
@@ -78,4 +112,8 @@ export const loginUser = async (req: Request, res: Response) => {
         email: foundUser.email,
       },
     });
+};
+
+export const logoutUser = (req: Request, res: Response) => {
+  res.clearCookie("token").clearCookie('user_meta').status(200).json({ message: "Logged out" });
 };
