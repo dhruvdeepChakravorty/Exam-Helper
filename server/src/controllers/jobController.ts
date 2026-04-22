@@ -17,3 +17,13 @@ export const getJobStatus = async (req:Request, res:Response) => {
         }
     })
 }
+
+export const getJobHistory = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  const allJobs = await Job.find({ userId })
+    .select("-extractedText -fileKeys -fileHashes")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({ data: { jobs: allJobs } });
+};
