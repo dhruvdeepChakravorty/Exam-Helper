@@ -44,7 +44,7 @@ export const registerUser = async (req: Request, res: Response) => {
         email: newUser.email,
       }),
       {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: "none",
         secure: process.env.NODE_ENV === "production",
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -98,7 +98,7 @@ export const loginUser = async (req: Request, res: Response) => {
         email: foundUser.email,
       }),
       {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: "none",
         secure: process.env.NODE_ENV === "production",
         maxAge: 7 * 24 * 60 * 60 * 1000,
